@@ -1,0 +1,5 @@
+Referências:
+https://www.codeproject.com/Articles/21002/NextUI-Thermometer-Panel (Termômetro)
+https://www.codeproject.com/Articles/20341/Aqua-Gauge (painel de velocidade)
+https://www.embarcados.com.br/comunicacao-serial-c-arduino-parte-1/ (comunicação serial com o arduino)
+https://www.youtube.com/watch?v=jQgwEsJISy0&t=1551s (estudo de eventos)

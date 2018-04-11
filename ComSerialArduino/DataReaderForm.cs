@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using NextUI.Collection;
 using System.Drawing;
+using System.Configuration;
 
 namespace ComSerialArduino
 {
@@ -13,6 +14,7 @@ namespace ComSerialArduino
         private string[] tempString;
         private List<ArduinoData> ardData = new List<ArduinoData>();
         private int numElements  = 0;
+        private int bRate = -1;
 
         public DataReaderForm()
         {
@@ -20,6 +22,7 @@ namespace ComSerialArduino
             InitializeThermometers();
             timerCOM.Enabled = true;
             UpdateComList();
+            UpdateBaudRateList();
             serialPort1.DataReceived += SerialPort1_OnDataReceived;
             timerCOM.Tick += TimerCOM_OnTick;
             this.FormClosed += DataReaderForm_OnFormClosed;
@@ -80,8 +83,16 @@ namespace ComSerialArduino
             {
                 try
                 {
-                    serialPort1.PortName = comboBox1.Items[comboBox1.SelectedIndex].ToString();
-                    serialPort1.Open();
+                    if (bRate == -1)
+                    {
+                        MessageBox.Show("Select Baud Rate first");
+                    }
+                    else
+                    {
+                        serialPort1.PortName = comboBox1.Items[comboBox1.SelectedIndex].ToString();
+                        serialPort1.BaudRate = bRate;
+                        serialPort1.Open();
+                    }
                 }
                 catch
                 {
@@ -143,29 +154,73 @@ namespace ComSerialArduino
         //Shows data in the window
         private void OnDataOutputting (object sender, EventArgs arg)
         {
-            int id = Int32.Parse(ardData[numElements].IdSensor);
-            switch (id)
+            try
             {
-                case 0:
-                    SpeedSensor.Value = Single.Parse(ardData[numElements].Value);
-                    SpeedSensor.DialText = SpeedSensor.Value.ToString();
-                    break;
-                case 1:
-                    thermoDisplay1.Number = (int) Math.Round (Single.Parse(ardData[numElements].Value));
-                break;
-            
-                
-            }
+                int id = Int32.Parse(ardData[numElements].IdSensor);
+                int val = (int)Math.Round(Single.Parse(ardData[numElements].Value));
+                switch (id)
+                {
+                    case 0:
+                        SpeedSensor.Value = val;
+                        SpeedSensor.DialText = SpeedSensor.Value.ToString();
+                        break;
+                    case 1:
+                        thermoDisplay1.Number = val;
+                        break;
+                    case 2:
+                        thermoDisplay3.Number = val;
+                        break;
+                    case 3:
+                        thermoDisplay4.Number = val;
+                        break;
+                    case 4:
+                        progressBar1.Value = val;
+                        progressBarValue.Text = val.ToString();
+                        break;
+                    default:
+                        MessageBox.Show("Sensor not listed");
+                        break;
 
-            numElements++;
+                }
+
+                numElements++;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error:" + e.Message);
+            }
         }
 
         private Timer _timer = new Timer();
+
+        //Generate Divisions for Thermomethers
         private void InitializeThermometers()
         {
-            for (int tempMark = 0; tempMark < 200; tempMark += 10)
+            int MINTEMP = Int32.Parse(ConfigurationManager.AppSettings["MinTemp"]);
+            int MAXTEMP = Int32.Parse(ConfigurationManager.AppSettings["MaxTemp"]);
+            for (int tempMark = MINTEMP; tempMark <= MAXTEMP; tempMark += 10)
             {
                 this.thermoDisplay1.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
+                this.thermoDisplay3.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
+                this.thermoDisplay4.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
+            }
+        }
+        private void UpdateBaudRateList()
+        {
+            string bTextTemp = ConfigurationManager.AppSettings["BaudRateList"];
+            string[] bText = bTextTemp.Split(';');
+
+            foreach (string s in bText)
+            {
+                BaudRateList.Items.Add(s);
+            }
+        }
+
+        private void BaudRateList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(BaudRateList.SelectedItem.ToString(), out bRate) == false)
+            {
+                bRate = -1;
             }
         }
     }

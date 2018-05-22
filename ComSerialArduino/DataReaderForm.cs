@@ -142,14 +142,18 @@ namespace ComSerialArduino
             {
                 tempString[i++] = s.Replace("\r", "");
             }
-            ardData.Add( new ArduinoData()
-            {
-                Time =  tempString[0],
-                IdSensor = tempString[1],
-                Value = tempString[2]
-            });
 
-            this.Invoke(new EventHandler(OnDataOutputting));
+            if (tempString[0] != "" && i == 3)
+            {
+                ardData.Add(new ArduinoData()
+                {
+                    Time = tempString[0],
+                    IdSensor = tempString[1],
+                    Value = tempString[2]
+                });
+
+                this.Invoke(new EventHandler(OnDataOutputting));
+            }   
         }
         //Shows data in the window
         private void OnDataOutputting (object sender, EventArgs arg)

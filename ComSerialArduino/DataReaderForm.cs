@@ -103,6 +103,7 @@ namespace ComSerialArduino
                 {
                     BtConnect.Text = "Desconectar";
                     comboBox1.Enabled = false;
+                    BaudRateList.Enabled = false;
                 }
             }
             else
@@ -172,10 +173,10 @@ namespace ComSerialArduino
                         thermoDisplay1.Number = val;
                         break;
                     case 2:
-                        thermoDisplay3.Number = val;
+                        //thermoDisplay4.Number = val;
                         break;
                     case 3:
-                        thermoDisplay4.Number = val;
+                        thermoDisplay3.Number = val;
                         break;
                     case 4:
                         progressBar1.Value = val;
@@ -206,7 +207,7 @@ namespace ComSerialArduino
             {
                 this.thermoDisplay1.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
                 this.thermoDisplay3.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
-                this.thermoDisplay4.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
+                //this.thermoDisplay4.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
             }
         }
         private void UpdateBaudRateList()

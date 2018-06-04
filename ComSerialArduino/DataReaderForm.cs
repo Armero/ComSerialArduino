@@ -38,12 +38,12 @@ namespace ComSerialArduino
         private void UpdateComList()
         {
             int i;
-            bool diffCount; //flag para sinalizar que a quantidade de portas mudou
+            bool diffCount;
 
             i = 0;
             diffCount = false;
 
-            //se a quantidade de portas mudou
+            //If number of ports changed then enable Com port update
             if (comboBox1.Items.Count == SerialPort.GetPortNames().Length)
             {
                 foreach (string s in SerialPort.GetPortNames())
@@ -59,25 +59,22 @@ namespace ComSerialArduino
                 diffCount = true;
             }
 
-            //Se não foi detectada diferença
+            //If difference was not found
             if (diffCount == false)
             {
                 return;                     //retorna
             }
 
-            //limpa comboBox
             comboBox1.Items.Clear();
 
-            //adiciona todas as COM diponíveis na lista
             foreach (string s in SerialPort.GetPortNames())
             {
                 comboBox1.Items.Add(s);
             }
-            //seleciona a primeira posição da lista
             comboBox1.SelectedIndex = 0;
 
         }
-        //Calls UpdateComList
+        //Calls UpdateComList after a defined time
         private void TimerCOM_OnTick(object sender, EventArgs e)
         {
             UpdateComList();

@@ -11,5 +11,10 @@ namespace ComSerialArduino
         public string Time { get; set; }
         public string IdSensor { get; set; }
         public string Value { get; set; }
+
+        public string printData ()
+        {
+            return ($"{Time}; {IdSensor}; {Value}\n");
+        }
     }
 }

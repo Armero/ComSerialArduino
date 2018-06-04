@@ -5,9 +5,11 @@ using System.IO.Ports;
 using NextUI.Collection;
 using System.Drawing;
 using System.Configuration;
+using System.IO;
 
 namespace ComSerialArduino
 {
+
     public partial class DataReaderForm : Form
     {
         private string RxString;
@@ -15,6 +17,9 @@ namespace ComSerialArduino
         private List<ArduinoData> ardData = new List<ArduinoData>();
         private int numElements  = 0;
         private int bRate = -1;
+        private string fileName = Directory.GetCurrentDirectory() + "/data.csv";
+        private const int SAVE_BUFFER_ELEMENTS = 100;
+        StreamWriter file;
 
         public DataReaderForm()
         {
@@ -26,6 +31,7 @@ namespace ComSerialArduino
             serialPort1.DataReceived += SerialPort1_OnDataReceived;
             timerCOM.Tick += TimerCOM_OnTick;
             this.FormClosed += DataReaderForm_OnFormClosed;
+            file = new StreamWriter(fileName, true);
         }
 
         //Updates list of COM ports available
@@ -53,7 +59,7 @@ namespace ComSerialArduino
                 diffCount = true;
             }
 
-            //Se não foi detectado diferença
+            //Se não foi detectada diferença
             if (diffCount == false)
             {
                 return;                     //retorna
@@ -127,6 +133,13 @@ namespace ComSerialArduino
         {
             if (serialPort1.IsOpen == true)
                 serialPort1.Close();
+
+            if (numElements != 0)
+            {
+                SaveDataIntoFile(numElements);
+            }
+
+            file.Close();
         }
         //Receives data from serial port
         private void SerialPort1_OnDataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -187,8 +200,6 @@ namespace ComSerialArduino
                         break;
 
                 }
-
-                numElements++;
             }
             catch (Exception e)
             {
@@ -226,6 +237,16 @@ namespace ComSerialArduino
             if (int.TryParse(BaudRateList.SelectedItem.ToString(), out bRate) == false)
             {
                 bRate = -1;
+            }
+        }
+
+        private void SaveDataIntoFile (int numElements)
+        {
+            int counter = 0;
+            foreach (ArduinoData ad in this.ardData)
+            {
+                file.Write(ad.printData());
+                counter++;
             }
         }
     }

@@ -197,6 +197,7 @@ namespace ComSerialArduino
                         break;
 
                 }
+                numElements++;
             }
             catch (Exception e)
             {

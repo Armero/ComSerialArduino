@@ -19,12 +19,12 @@ Código do programa principal para Rede CAN.
 
 */
 
-#include <OneWire.h> /*Biblioteca utilizada pelo sensor DS18B20.*/
-#include <DallasTemperature.h> /*Biblioteca utilizada pelo sensor DS18B20.*/
-#include <can_communication.h>
-#include <RedeCAN_Hall.h>
-#include <RedeCAN_LM35.h>
-#include <RedeCAN_TPS.h>
+#include "OneWire.h" /*Biblioteca utilizada pelo sensor DS18B20.*/
+#include "DallasTemperature.h" /*Biblioteca utilizada pelo sensor DS18B20.*/
+#include "can_communication.h"
+#include "RedeCAN_Hall.h"
+#include "RedeCAN_LM35.h"
+#include "RedeCAN_TPS.h"
  
 
 /*DEFINIÇÕES DA PORTAS UTILIZADAS NO ARDUINO*/

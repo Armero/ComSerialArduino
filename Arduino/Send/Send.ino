@@ -118,7 +118,7 @@ void loop() {
   // send data:  ID = 0x100, Standard CAN Frame, Data length = 8 bytes, 'data' = array of data bytes to send
   
   MandarDados (lm35, CAN0, 0x100);
-  MandarDados (tps, CAN0, 0x200);
+  MandarDados (tps>100?0:tps, CAN0, 0x200);
   MandarDados (hallAux, CAN0, 0x300);
   MandarDados (tempDs18b20, CAN0, 0x400);
 

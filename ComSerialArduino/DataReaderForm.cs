@@ -212,7 +212,7 @@ namespace ComSerialArduino
         {
             int MINTEMP = Int32.Parse(ConfigurationManager.AppSettings["MinTemp"]);
             int MAXTEMP = Int32.Parse(ConfigurationManager.AppSettings["MaxTemp"]);
-            for (int tempMark = MINTEMP; tempMark <= MAXTEMP; tempMark += 10)
+            for (int tempMark = MINTEMP; tempMark <= MAXTEMP; tempMark += 1)
             {
                 this.thermoDisplay1.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
                 this.thermoDisplay3.Label.Add(new MeterLabel(tempMark, tempMark.ToString()));
